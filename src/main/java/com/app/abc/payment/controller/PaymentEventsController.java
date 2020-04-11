@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.abc.payment.kafka.producer.PaymentEventProducer;
 import com.app.abc.payment.model.entity.Payment;
-import com.app.abc.payment.producer.PaymentEventProducer;
 import com.app.abc.payment.service.IPaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 

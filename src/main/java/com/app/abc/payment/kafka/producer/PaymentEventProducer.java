@@ -1,4 +1,4 @@
-package com.app.abc.payment.producer;
+package com.app.abc.payment.kafka.producer;
 
 import java.util.List;
 
