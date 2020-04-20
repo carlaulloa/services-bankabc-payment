@@ -14,10 +14,13 @@ import com.app.abc.payment.model.entity.Payment;
 import com.app.abc.payment.service.IPaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import brave.Tracer;
+
 @RestController
 public class PaymentEventsController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PaymentEventsController.class);
+	private @Autowired Tracer tracer;
 	private @Autowired IPaymentService paymentService;
 	private @Autowired PaymentEventProducer paymentEventProducer;
 	
@@ -25,8 +28,10 @@ public class PaymentEventsController {
 	public ResponseEntity<Payment> savePayment(@RequestBody Payment payment) throws JsonProcessingException{
 		LOGGER.info("antes sendPaymentEvent");
 		Payment paymentEvent = this.paymentService.save(payment);
+		this.tracer.currentSpan().tag("info", "Pago registrado en BD");
 		this.paymentEventProducer.sendPaymentEvent(paymentEvent);
 		LOGGER.info("despues sendPaymentEvent");
+		this.tracer.currentSpan().tag("info", "Evento enviado via Kafka");
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(paymentEvent);
 	}
